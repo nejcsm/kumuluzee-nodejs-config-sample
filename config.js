@@ -21,12 +21,12 @@ const restConfig = new ConfigBundle({
       watch: true,
       fields: {
         firstProperty: {
-          name: 'first',
           type: 'number',
+          name: 'first',
         },
         secondProperty: {
-          name: 'second',
           type: 'number',
+          name: 'second',
         },
       },
     },
