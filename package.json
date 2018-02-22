@@ -1,0 +1,17 @@
+{
+  "name": "kumuluzee-nodejs-config-sample",
+  "version": "0.1.0",
+  "scripts": {
+    "start": "babel-node server.js"
+  },
+  "dependencies": {
+    "express": "^4.14.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-preset-env": "^1.6.1"
+  },
+  "main": "server.js",
+  "author": "Nejc Smolej",
+  "license": "MIT"
+}

@@ -1,0 +1,28 @@
+kumuluzee:
+  name: rest-service
+  version: 1.0.0
+  port: 3000
+  env:
+    name: dev
+  config:
+    start-retry-delay-ms: 500
+    max-retry-delay-ms: 900000
+    etcd:
+      hosts: http://localhost:2379
+
+rest-config:
+  string-property: Monday
+  boolean-property: true
+  int: 23
+  object-property:
+    first: 1
+    second: 2
+  array-property:
+    - first
+    - second
+    - third
+  array-object-property:
+    - http: foo
+      port: 1234
+    - http: bar
+      port: 2345
