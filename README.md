@@ -1,10 +1,11 @@
+
 # KumuluzEE Node.js Config Sample
 
 Purpose of this sample is to show how to develop a microservice that uses KumuluzEE Node.js Config library to access configuration properties stored in Consul and etcd.
 
 ## Requirements
 
-Node version >= 8.x
+Node version >= 8.0.0
 ```
 $ node --version
 ```
@@ -68,9 +69,8 @@ Define KumuluzEE configuration as well as your custom configuration properties i
 
 ```yml
 kumuluzee:
-  name: rest-service
+  name: customer-service
   version: 1.0.0
-  port: 3000
   env:
     name: dev
   config:
@@ -151,7 +151,7 @@ const restConfig = new ConfigBundle({
   },
 });
 
-restConfig.initialize({ extension: 'etcd' }); // or 'consul'
+restConfig.initialize({ extension: process.env.EXTENSION }); // 'consul' or 'etcd'
 
 export { restConfig };
 ```
@@ -167,7 +167,7 @@ import { restConfig } from './config.js';
 
 const server = express();
 
-server.get('/config', (req, res) => {
+server.get('/v1/config', (req, res) => {
   res.status(200).json(restConfig);
 });
 
@@ -177,10 +177,14 @@ server.all('*', (req, res) => {
   });
 });
 
-server.listen(3000, () => {
-  console.info(`Server is listening on port 3000`);
+server.listen(process.env.PORT || 8080, () => {
+  console.info(`Server is listening on port ${process.env.PORT || 8080}`);
 });
 ```
+
+Before you run the sample you should set environmental variables `EXTENSION` and `PORT`:
+* EXTENSION: sets configuration source, possible values: `consul` and `etcd`,
+* PORT: sets the value of server port, default `8080`.
 
 Finally run the service using command:
 
@@ -189,20 +193,20 @@ $ npm run start
 ```
 
 
-Since you have not defined any configuration properties in etcd (or Consul), GET [http://localhost:3000/config](http://localhost:3000/config) will return configuration properties from configuration file. For example you can now dynamically update value on the filed `stringProperty`.
+Since you have not defined any configuration properties in etcd (or Consul), GET [http://localhost:8080/v1/config](http://localhost:8080/v1/config) will return configuration properties from configuration file. For example you can now dynamically update value on the filed `stringProperty`.
 
 **Updating value in Consul**
 
 We can add a value to Consul from the user interface, which can be accessed at  `http://localhost:8500`.
 
-To set a value, navigate to  `KEY/VALUE`  tab and create key  `environments/dev/services/rest-service/1.0.0/config/rest-config/string-property`  with a value of your own choosing.
+To set a value, navigate to  `KEY/VALUE`  tab and create key  `environments/dev/services/customer-service/1.0.0/config/rest-config/string-property`  with a value of your own choosing.
 
 
 **Updating value in etcd**
 
 We can add a value to etcd with the following command:
 ```
- $ docker exec etcd etcdctl --endpoints //localhost:2379 set /environments/dev/services/rest-service/1.0.0/config/rest-config/string-property test_string
+ $ docker exec etcd etcdctl --endpoints //localhost:2379 set /environments/dev/services/customer-service/1.0.0/config/rest-config/string-property test_string
 ```
 
 Access the config endpoint again and you will get an updated value from additional configuration source.

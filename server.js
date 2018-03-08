@@ -4,7 +4,7 @@ import { restConfig } from './config.js';
 
 const server = express();
 
-server.get('/config', (req, res) => {
+server.get('/v1/config', (req, res) => {
   res.status(200).json(restConfig);
 });
 
@@ -14,6 +14,6 @@ server.all('*', (req, res) => {
   });
 });
 
-server.listen(3000, () => {
-  console.info(`Server is listening on port 3000`);
+server.listen(process.env.PORT || 8080, () => {
+  console.info(`Server is listening on port ${process.env.PORT || 8080}`);
 });

@@ -47,6 +47,6 @@ const restConfig = new ConfigBundle({
   },
 });
 
-restConfig.initialize({ extension: 'etcd' });
+restConfig.initialize({ extension: process.env.EXTENSION });
 
 export { restConfig };
